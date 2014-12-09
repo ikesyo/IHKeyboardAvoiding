@@ -66,7 +66,7 @@ static float _minimumAnimationDuration;
             //showing and docked
             if (targetView) {
                 float diff = 0;
-                if (keyboardHeightDiff > 0) {
+                if (keyboardHeightDiff != 0) {
                     diff = keyboardHeightDiff;
                 }
                 else {
@@ -118,7 +118,7 @@ static float _minimumAnimationDuration;
                         default:
                         {
                             float minimumDisplacement = fmaxf(displacement, diff);
-                            displacement = minimumDisplacement - (keyboardHeightDiff <= 0 ? _padding : 0);
+                            displacement = minimumDisplacement - (keyboardHeightDiff == 0 ? _padding : 0);
                             break;
                         }
                     }
@@ -145,7 +145,9 @@ static float _minimumAnimationDuration;
                                              [_avoidingView.superview layoutIfNeeded]; // to animate constraint changes
                                          }
                                          else {
-                                             _avoidingView.transform = CGAffineTransformMakeTranslation(0, displacement);
+                                             CGAffineTransform transform = _avoidingView.transform;
+                                             transform = CGAffineTransformTranslate(transform, 0, displacement);
+                                             _avoidingView.transform = transform;
                                          }
                                      }
                                      completion:nil];
